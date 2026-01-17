@@ -1,0 +1,10 @@
+{
+  "background_color": "#ffffff",
+  "description": "UnoRepro",
+  "display": "standalone",
+  "name": "UnoRepro",
+  "short_name": "UnoRepro",
+  "start_url": "/index.html",
+  "theme_color": "#ffffff",
+  "scope": "/"
+}
