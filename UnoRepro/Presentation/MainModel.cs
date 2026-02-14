@@ -1,3 +1,5 @@
+using Microsoft.UI.Xaml.Input;
+
 namespace UnoRepro.Presentation;
 
 public partial record MainModel
@@ -24,5 +26,4 @@ public partial record MainModel
         var name = await Name;
         await _navigator.NavigateViewModelAsync<SecondModel>(this, data: new Entity(name!));
     }
-
 }
