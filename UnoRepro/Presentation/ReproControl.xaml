@@ -1,0 +1,11 @@
+﻿<UserControl x:Class="UnoRepro.Presentation.ReproControl"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:UnoRepro.Presentation"
+      xmlns:uen="using:Uno.Extensions.Navigation.UI"
+      xmlns:utu="using:Uno.Toolkit.UI"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <TextBlock Name="Text" Text="This is a custom control" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalTextAlignment="Center" />
+
+</UserControl>

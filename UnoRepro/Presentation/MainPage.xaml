@@ -21,10 +21,10 @@
         
         <TabView Grid.Row="1">
             <TabViewItem Header="Tab 1">
-                <TextBlock Text="Content of Tab 1" />
+                <local:ReproControl/>
             </TabViewItem>
             <TabViewItem Header="Tab 2">
-                <TextBlock Text="Content of Tab 2" />
+                <local:ReproControl/>
             </TabViewItem>
         </TabView>
         
