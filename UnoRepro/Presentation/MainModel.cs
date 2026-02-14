@@ -4,6 +4,8 @@ namespace UnoRepro.Presentation;
 
 public partial record MainModel
 {
+    private int counter;
+
     private INavigator _navigator;
 
     public MainModel(
@@ -25,5 +27,11 @@ public partial record MainModel
     {
         var name = await Name;
         await _navigator.NavigateViewModelAsync<SecondModel>(this, data: new Entity(name!));
+    }
+
+    public async Task HotKey(string key)
+    {
+        counter++;
+        await Name.SetAsync($"{key} - {counter}");
     }
 }

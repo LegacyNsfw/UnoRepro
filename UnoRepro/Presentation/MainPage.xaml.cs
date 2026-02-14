@@ -30,7 +30,7 @@ public sealed partial class MainPage : Page
         {
             if (mainViewModel.Model != null)
             {
-                await mainViewModel.Model.Name.SetAsync(args.KeyboardAccelerator.Key.ToString());
+                await mainViewModel.Model.HotKey(args.KeyboardAccelerator.Key.ToString());
             }
         }
     }
