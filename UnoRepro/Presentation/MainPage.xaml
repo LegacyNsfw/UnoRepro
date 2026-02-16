@@ -10,6 +10,8 @@
         <KeyboardAccelerator Modifiers="Control" Key="A"       Invoked="HandleHotKey" />
         <KeyboardAccelerator Modifiers="Control" Key="Q" Invoked="HandleHotKey"/>
         <KeyboardAccelerator Modifiers="Control" Key="W" Invoked="HandleHotKey"/>
+        <KeyboardAccelerator Modifiers="Control" Key="PageDown" Invoked="HandleHotKey"/>
+        <KeyboardAccelerator Modifiers="Control" Key="PageUp" Invoked="HandleHotKey"/>        
     </Page.KeyboardAccelerators>
     <Grid utu:SafeArea.Insets="VisibleBounds">
         <Grid.RowDefinitions>
@@ -20,6 +22,7 @@
         <TextBox Grid.Row="0" Name="TextBox" Text="{Binding Name, Mode=TwoWay}" PlaceholderText="Enter your name:" />
         
         <TabView
+            Name="TabView"
             Grid.Row="1"
             TabItemsSource="{Binding Tabs}"
             >

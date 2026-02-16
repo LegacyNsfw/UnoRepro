@@ -29,6 +29,44 @@ public partial record MainModel
 
     public IState<string> Name => State<string>.Value(this, () => string.Empty);
 
+    public async Task<bool> HandleHotKey(object sender, Windows.System.VirtualKey key)
+    {
+        TabModel? selectedTab = await this.SelectedTab.Value();
+        int tabIndex = (selectedTab == null) ? -1 : _tabs.IndexOf(selectedTab);
+
+        switch (key)
+        {
+            case Windows.System.VirtualKey.W:
+                await AddTab();
+                return true;
+        
+            case Windows.System.VirtualKey.PageDown:
+                if ((tabIndex != -1) && (tabIndex > 0))
+                {
+                    TabModel nextSelectedTab = _tabs[tabIndex - 1];
+                    if (nextSelectedTab != null)
+                    {
+                        await SelectedTab.UpdateAsync(_ => nextSelectedTab);
+                        return true;
+                    }
+                }
+                break;
+
+            case Windows.System.VirtualKey.PageUp:
+                if ((tabIndex != -1) && (tabIndex < _tabs.Count - 1))
+                {
+                    TabModel nextSelectedTab = _tabs[tabIndex + 1];
+                    if (nextSelectedTab != null)
+                    {
+                        await SelectedTab.UpdateAsync(_ => nextSelectedTab);
+                        return true;
+                    }
+                }
+                break;
+        }
+        return false;
+    }
+
     public async Task AddTab()
     {
         TabModel newModel = new TabModel($"Tab {counter++}");
