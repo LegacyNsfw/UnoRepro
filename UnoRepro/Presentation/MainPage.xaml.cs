@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Input;
+using Windows.System;
 
 namespace UnoRepro.Presentation;
 
@@ -44,6 +45,11 @@ public sealed partial class MainPage : Page
 
     public async void HandleHotKey(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
     {
+        if (!args.KeyboardAccelerator.Modifiers != VirtualKeyModifiers.Control)
+        {
+            return;
+        }
+
         object dataContext = DataContext;
         if (dataContext is MainViewModel mainViewModel)
         {

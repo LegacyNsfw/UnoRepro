@@ -32,18 +32,27 @@ public partial record MainModel
     public async Task<bool> HandleHotKey(object sender, Windows.System.VirtualKey key)
     {
         TabModel? selectedTab = await this.SelectedTab.Value();
-        int tabIndex = (selectedTab == null) ? -1 : _tabs.IndexOf(selectedTab);
+        int selectedTabIndex = (selectedTab == null) ? -1 : _tabs.IndexOf(selectedTab);
 
         switch (key)
         {
-            case Windows.System.VirtualKey.W:
+            case Windows.System.VirtualKey.Q:
                 await AddTab();
                 return true;
+
+            case Windows.System.VirtualKey.W:
+                if (selectedTabIndex != -1)
+                {
+                    _tabs = _tabs.RemoveAt(selectedTabIndex);
+                    await Tabs.UpdateAsync(_ => _tabs);
+                    return true;
+                }
+                break;
         
             case Windows.System.VirtualKey.PageDown:
-                if ((tabIndex != -1) && (tabIndex > 0))
+                if ((selectedTabIndex != -1) && (selectedTabIndex > 0))
                 {
-                    TabModel nextSelectedTab = _tabs[tabIndex - 1];
+                    TabModel nextSelectedTab = _tabs[selectedTabIndex - 1];
                     if (nextSelectedTab != null)
                     {
                         await SelectedTab.UpdateAsync(_ => nextSelectedTab);
@@ -53,9 +62,9 @@ public partial record MainModel
                 break;
 
             case Windows.System.VirtualKey.PageUp:
-                if ((tabIndex != -1) && (tabIndex < _tabs.Count - 1))
+                if ((selectedTabIndex != -1) && (selectedTabIndex < _tabs.Count - 1))
                 {
-                    TabModel nextSelectedTab = _tabs[tabIndex + 1];
+                    TabModel nextSelectedTab = _tabs[selectedTabIndex + 1];
                     if (nextSelectedTab != null)
                     {
                         await SelectedTab.UpdateAsync(_ => nextSelectedTab);
@@ -72,6 +81,5 @@ public partial record MainModel
         TabModel newModel = new TabModel($"Tab {counter++}");
         _tabs = _tabs.Add(newModel);
         await Tabs.UpdateAsync(_ => _tabs);
-        await SelectedTab.UpdateAsync(_ => newModel);
     }
 }

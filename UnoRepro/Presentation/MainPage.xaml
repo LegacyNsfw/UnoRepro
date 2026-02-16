@@ -20,19 +20,13 @@
         </Grid.RowDefinitions>
       
         <TextBox Grid.Row="0" Name="TextBox" Text="{Binding Name, Mode=TwoWay}" PlaceholderText="Enter your name:" />
-        
+
         <TabView
             Name="TabView"
             Grid.Row="1"
+            SelectedItem="{Binding SelectedTab}"
             TabItemsSource="{Binding Tabs}"
-            >
-            <TabViewItem Header="Tab 1">
-                <TextBlock Text="Content of Tab 1" />
-            </TabViewItem>
-            <TabViewItem Header="Tab 2">
-                <TextBlock Text="Content of Tab 2" />
-            </TabViewItem>
-        </TabView>
-        
+            />
+
     </Grid>
 </Page>
