@@ -18,12 +18,39 @@
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-      
-        <TextBox Grid.Row="0" Name="TextBox" Text="{Binding Name, Mode=TwoWay}" PlaceholderText="Click here to identify previous focus holder" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBox
+            Grid.Row="0"
+            Grid.Column="1"
+            Name="TextBox"
+            Text="{Binding Name, Mode=TwoWay}"
+            PlaceholderText="Click here to identify previous focus holder" />
+
+        <SplitView
+                DisplayMode="CompactInline"                
+                Grid.Row="1"
+                Grid.Column="0"
+                OpenPaneLength="200"
+                CompactPaneLength="60"
+                >
+            <SplitView.Pane>
+                <Button/>
+            </SplitView.Pane>
+            
+            <SplitView.Content>
+                <TextBlock Text="Placeholder"/>
+            </SplitView.Content>
+
+        </SplitView>
 
         <TabView
-            Name="TabView"
             Grid.Row="1"
+            Grid.Column="1"
+            Name="TabView"
             SelectedIndex="{Binding SelectedIndex}"
             SelectedItem="{Binding SelectedTab}"
             TabItemsSource="{Binding Tabs}"
