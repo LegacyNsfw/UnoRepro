@@ -10,7 +10,7 @@ public sealed partial class MainPage : Page
     {
         this.InitializeComponent();
         this.TextBox.GettingFocus += TextBox_GettingFocus;
-        this.TabView.AddHandler(UIElement.KeyDownEvent, new KeyEventHandler(HandleHotKey2), false);
+//        this.TabView.AddHandler(UIElement.KeyDownEvent, new KeyEventHandler(HandleKeyDown), false);
     }
 
     private async void TextBox_GettingFocus(UIElement sender, GettingFocusEventArgs args)
@@ -20,21 +20,39 @@ public sealed partial class MainPage : Page
         {
             if (mainViewModel.Model != null)
             {
-                // string currentFocus = args.OldFocusedElement?.GetType().Name ?? "None";
-                string currentFocus = FocusManager.GetFocusedElement(this.XamlRoot)?.GetType()?.Name ?? "None";
-                await mainViewModel.Model.Name.SetAsync(currentFocus);
+                if (args.OldFocusedElement == null)
+                {
+                    await mainViewModel.Model.Name.SetAsync("OldFocusedElement is null");
+                }
+                else if (this.XamlRoot == null)
+                {
+                    await mainViewModel.Model.Name.SetAsync("No Xaml Root");
+                }
+                else
+                {
+                    var focusedElement = FocusManager.GetFocusedElement(this.XamlRoot);
+                    if (focusedElement == null)
+                    {
+                        await mainViewModel.Model.Name.SetAsync("FocusManager.GetFocusedElement(xamlRoot) returned null");
+                    }
+                    else
+                    {
+                        string currentFocus = focusedElement?.GetType()?.Name ?? "None";
+                        await mainViewModel.Model.Name.SetAsync(currentFocus);
+                    }
+                }
             }
         }
     }
 
-    private async void HandleHotKey2(object sender, KeyRoutedEventArgs e)
+    private async void HandleKeyDown(object sender, KeyRoutedEventArgs e)
     {
         object dataContext = DataContext;
         if (dataContext is MainViewModel mainViewModel)
         {
             if (mainViewModel.Model != null)
             {
-                bool handled = await mainViewModel.Model.HandleHotKey(sender, e.Key);
+                bool handled = await mainViewModel.Model.HandleAccelerator("HandleKeyDown", e.Key);
                 if (handled)
                 {
                     e.Handled = true;
@@ -43,19 +61,18 @@ public sealed partial class MainPage : Page
         }
     }
 
-    public async void HandleHotKey(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    public async void HandleAccelerator(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
     {
-        if (!args.KeyboardAccelerator.Modifiers != VirtualKeyModifiers.Control)
+        if (args.KeyboardAccelerator.Modifiers != VirtualKeyModifiers.Control)
         {
             return;
         }
 
-        object dataContext = DataContext;
-        if (dataContext is MainViewModel mainViewModel)
+        if (DataContext is MainViewModel mainViewModel)
         {
             if (mainViewModel.Model != null)
             {
-                bool handled = await mainViewModel.Model.HandleHotKey(sender, args.KeyboardAccelerator.Key);
+                bool handled = await mainViewModel.Model.HandleAccelerator(sender, args.KeyboardAccelerator.Key);
                 if (handled)
                 {
                     args.Handled = true;
@@ -63,4 +80,17 @@ public sealed partial class MainPage : Page
             }
         }
     }
+
+    public async void OnTabCloseRequested(object sender, TabViewTabCloseRequestedEventArgs args)
+    {
+        if (DataContext is MainViewModel mainViewModel)
+        {
+            TabModel? tabModel = args.Tab?.DataContext as TabModel;
+            if (tabModel != null)
+            {
+                await mainViewModel.Model.OnCloseTabRequested(tabModel);
+            }
+        }
+    }
+
 }

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Input;
 
 namespace UnoRepro.Presentation;
@@ -12,7 +13,15 @@ public partial record MainModel
 
     public IListState<TabModel> Tabs => ListState.Value(this, () => _tabs);
 
-    public IState<TabModel> SelectedTab => State<TabModel>.Value(this, () => default!);
+    public IState<TabModel> SelectedTab => State<TabModel>.Value(this, () => default!).ForEach((tabModel, ct) =>
+    {
+        return ValueTask.CompletedTask; // just a place to set a breakpoint
+    });
+
+    public IState<int> SelectedIndex => State<int>.Value(this, () => -1).ForEach((index, ct) =>
+    {
+        return ValueTask.CompletedTask; // just a place to set a breakpoint
+    });
 
     public MainModel(
         IStringLocalizer localizer,
@@ -29,14 +38,15 @@ public partial record MainModel
 
     public IState<string> Name => State<string>.Value(this, () => string.Empty);
 
-    public async Task<bool> HandleHotKey(object sender, Windows.System.VirtualKey key)
+    public async Task<bool> HandleAccelerator(object sender, Windows.System.VirtualKey key)
     {
         TabModel? selectedTab = await this.SelectedTab.Value();
-        int selectedTabIndex = (selectedTab == null) ? -1 : _tabs.IndexOf(selectedTab);
+        //int selectedTabIndex = (selectedTab == null) ? -1 : _tabs.IndexOf(selectedTab);
+        int selectedTabIndex = await this.SelectedIndex.Value();
 
         switch (key)
         {
-            case Windows.System.VirtualKey.Q:
+            case Windows.System.VirtualKey.A:
                 await AddTab();
                 return true;
 
@@ -74,6 +84,17 @@ public partial record MainModel
                 break;
         }
         return false;
+    }
+
+    public async Task OnCloseTabRequested(TabModel tabModel)
+    {
+        int index = _tabs.IndexOf(tabModel);
+        if (index != -1)
+        {
+            _tabs = _tabs.RemoveAt(index);
+            await Tabs.UpdateAsync(_ => _tabs);
+        }
+
     }
 
     public async Task AddTab()

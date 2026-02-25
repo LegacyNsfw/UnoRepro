@@ -7,11 +7,11 @@
       NavigationCacheMode="Required"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.KeyboardAccelerators>
-        <KeyboardAccelerator Modifiers="Control" Key="A"       Invoked="HandleHotKey" />
-        <KeyboardAccelerator Modifiers="Control" Key="Q" Invoked="HandleHotKey"/>
-        <KeyboardAccelerator Modifiers="Control" Key="W" Invoked="HandleHotKey"/>
-        <KeyboardAccelerator Modifiers="Control" Key="PageDown" Invoked="HandleHotKey"/>
-        <KeyboardAccelerator Modifiers="Control" Key="PageUp" Invoked="HandleHotKey"/>        
+        <KeyboardAccelerator Modifiers="Control" Key="A"       Invoked="HandleAccelerator" />
+        <KeyboardAccelerator Modifiers="Control" Key="Q" Invoked="HandleAccelerator"/>
+        <KeyboardAccelerator Modifiers="Control" Key="W" Invoked="HandleAccelerator"/>
+        <KeyboardAccelerator Modifiers="Control" Key="PageDown" Invoked="HandleAccelerator"/>
+        <KeyboardAccelerator Modifiers="Control" Key="PageUp" Invoked="HandleAccelerator"/>        
     </Page.KeyboardAccelerators>
     <Grid utu:SafeArea.Insets="VisibleBounds">
         <Grid.RowDefinitions>
@@ -19,13 +19,15 @@
             <RowDefinition />
         </Grid.RowDefinitions>
       
-        <TextBox Grid.Row="0" Name="TextBox" Text="{Binding Name, Mode=TwoWay}" PlaceholderText="Enter your name:" />
+        <TextBox Grid.Row="0" Name="TextBox" Text="{Binding Name, Mode=TwoWay}" PlaceholderText="Click here to identify previous focus holder" />
 
         <TabView
             Name="TabView"
             Grid.Row="1"
+            SelectedIndex="{Binding SelectedIndex}"
             SelectedItem="{Binding SelectedTab}"
             TabItemsSource="{Binding Tabs}"
+            TabCloseRequested="OnTabCloseRequested"
             />
 
     </Grid>
